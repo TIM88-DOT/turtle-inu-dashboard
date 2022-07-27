@@ -79,3 +79,10 @@ img {
     -webkit-transition: all 400ms cubic-bezier(.25, .46, .45, .94);
     transition: all 400ms cubic-bezier(.25, .46, .45, .94);
 }
+
+@media (min-width: 315px) and (max-width: 424px){
+    .sidebar{
+      display: none;
+    } 
+
+  }
