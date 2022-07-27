@@ -96,7 +96,7 @@ const Account = () => {
   }, [blockchain]);
   return (
     <div>
-      <Sidebar/>
+      <Sidebar />
       <div className="account">
         <div className="header">
           <h1>Turtle Inu Official Dashboard  </h1>
@@ -105,18 +105,18 @@ const Account = () => {
 
         <div className="first_block">
           <div className="block_inner">
-            <h4>You earned</h4>
-            <div className="price"><h3>0</h3>
-              <h5>$TINU</h5></div>
-          </div>
-          <div className="block_inner right_block">
-
             <h4>Your Balance</h4>
             <div className="price"><h3>0</h3>
               <h5>$TINU</h5></div>
           </div>
           <div className="block_inner right_block">
-            <h4>Total rewards</h4>
+
+            <h4>TINU Price</h4>
+            <div className="price"><h3>0</h3>
+              <h5>$USD</h5></div>
+          </div>
+          <div className="block_inner right_block">
+            <h4>Vault Balance</h4>
             <div className="price"><h3>0</h3>
               <h5>$TINU</h5></div>
 
@@ -128,23 +128,23 @@ const Account = () => {
 
           <div className="secondary_block">
             <div className="inner_block2">
-              <h4>Vault Unlocks in</h4>
-              <h5>50:40:20</h5>
+              <h4>$TINU Earned</h4>
+              <h5>Coming Soon</h5>
             </div>
             <div className="inner_block2 right_block">
-              <h4>Vault Value</h4>
-              <h5>$3,752,419</h5>
+              <h4>Vault Value (TVL)</h4>
+              <h5>Coming Soon</h5>
             </div>
           </div>
 
           <div className="secondary_block">
             <div className="inner_block2">
-              <h4>$TINU Price</h4>
-              <h5>$0.056</h5>
+              <h4>Coming soon</h4>
+              <h5>???</h5>
             </div>
             <div className="inner_block2 right_block">
-              <h4>Claimable $TINU</h4>
-              <h5>752,419</h5>
+              <h4>Coming soon</h4>
+              <h5>???</h5>
             </div>
           </div>
 
