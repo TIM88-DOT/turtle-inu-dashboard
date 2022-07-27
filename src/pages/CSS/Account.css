@@ -1,8 +1,8 @@
 .account {
   z-index: -2;
-  margin-left: 23%;
+  margin-left: 20%;
   margin-top: 7vh;
-  width: 60%;
+  width: 70%;
   position: relative;
   color: white;
 }
@@ -25,7 +25,6 @@
 }
 
 .block_inner {
-  padding: 1em;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
@@ -37,7 +36,8 @@
   overflow: hidden;
   filter: brightness(120%);
   transition: all 400ms;
-  background-color: #c7e4d4
+  background-color: #c7e4d4;
+  margin:1.5em;
 }
 
 
@@ -54,7 +54,6 @@
 }
 
 .right_block {
-  margin-left: 1.2em;
 }
 
 .block_inner h5 {
