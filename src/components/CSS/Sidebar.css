@@ -1,0 +1,81 @@
+img {
+    max-width: 60%;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.sidebar {
+    position: fixed;
+    left: 0%;
+    top: 0%;
+    right: auto;
+    bottom: 0%;
+    z-index: 49;
+    display: -ms-grid;
+    display: grid;
+    overflow: hidden;
+    width: 80px;
+    padding-top: 80px;
+    padding-bottom: 24px;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    grid-auto-columns: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    -ms-grid-columns: 1fr;
+    grid-template-columns: 1fr;
+    -ms-grid-rows: minmax(200px, 620px) auto;
+    grid-template-rows: minmax(200px, 620px) auto;
+    border-right: 1px solid rgba(192, 192, 211, 0.2);
+}
+
+.sidebar img {
+    transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
+    transform-style: preserve-3d;
+}
+
+.social-sidebar-icons {
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-column-gap: 6px;
+    grid-row-gap: 6px;
+    -ms-grid-columns: 1fr;
+    grid-template-columns: 1fr;
+    -ms-grid-rows: auto auto;
+    grid-template-rows: auto auto;
+    align-self: flex-end;
+    justify-self: center;
+}
+
+.sidebar-icon {
+    display: flex;
+    width: 34px;
+    height: 34px;
+    padding: 2px;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgba(192, 192, 211, 0.2);
+    border-radius: 100px;
+    background-color: rgba(174, 174, 192, 0.05);
+    -webkit-transition: all 400ms cubic-bezier(.25, .46, .45, .94);
+    transition: all 400ms cubic-bezier(.25, .46, .45, .94);
+}
