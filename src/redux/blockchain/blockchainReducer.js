@@ -25,6 +25,7 @@ const blockchainReducer = (state = initialState, action) => {
         smartContract: action.payload.smartContract,
         connected: action.payload.connected,
         myBalance: action.payload.myBalance,
+        nextSellDate: action.payload.nextSellDate,
       };
     case "CONNECTION_FAILED":
       return {
@@ -42,7 +43,6 @@ const blockchainReducer = (state = initialState, action) => {
         ...state,
         price: action.payload.price,
         //deadBalance: action.payload.dead,
-        nextSellDate: action.payload.nextSellDate,
         pool: action.payload.pool
       };
     default:

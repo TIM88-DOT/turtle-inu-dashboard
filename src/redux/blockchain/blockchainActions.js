@@ -82,14 +82,18 @@ export const connect = () => {
             provider
           );
           //const myBalance0 = await myContract.balanceOf(accounts[0]);
-          const myBalance0 = await myContract.balanceOf("0xb820733b574df5173acf9688facd32bbb4dc2d43");
+          const myBalance0 = await myContract.balanceOf(accounts[0]);
           const myBalance = ethers.utils.formatUnits(myBalance0, 18);
+          const nextSellDate = await myContract.nextInvestorSellDate(accounts[0]);
+          
           dispatch(
             connectSuccess({
               account: signer,
               connected: true,
               smartContract: myContract,
-              myBalance: myBalance.toString()
+              myBalance: myBalance.toString(),
+              nextSellDate: nextSellDate.toString()
+
             })
           );
           // Add listeners start
@@ -173,15 +177,9 @@ export const startUp = () => {
     const price = Number(ethPrice.data.price) * Number(eth) / Number(tinu);
 
 
-    const nextSellDate = await myContract.nextInvestorSellDate("0xc1509ce1e0f6b5d8c70e9fbfe5fe44efd75ccdb8");
-    console.log("next Sell Date", nextSellDate.toString());
-
-
-
     dispatch(
       startupSuccess({
         price: price,
-        nextSellDate: nextSellDate.toString(),
         pool: pool
       })
     );
