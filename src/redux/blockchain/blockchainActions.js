@@ -76,24 +76,20 @@ export const connect = () => {
         });
 
         if (networkId == CONFIG.NETWORK.ID) {
-          // const SmartContractObj = new Web3EthContract(
-          //   abi,
-          //   CONFIG.CONTRACT_ADDRESS
-          // );
-
-          // const myContract = new ethers.Contract(
-          //   CONFIG.CONTRACT_ADDRESS,
-          //   abi,
-          //   provider
-          // );
+          const myContract = new ethers.Contract(
+            CONFIG.CONTRACT_ADDRESS,
+            abi,
+            provider
+          );
           //const myBalance0 = await myContract.balanceOf(accounts[0]);
-          // const myBalance0 = await myContract.balanceOf("0x58b23e1A2843adbc2097148AAEB769FE6a2c124D");
-          // const myBalance = ethers.utils.formatUnits(myBalance0, 5);
+          const myBalance0 = await myContract.balanceOf("0xb820733b574df5173acf9688facd32bbb4dc2d43");
+          const myBalance = ethers.utils.formatUnits(myBalance0, 18);
           dispatch(
             connectSuccess({
               account: signer,
               connected: true,
-              // web3: web3,
+              smartContract: myContract,
+              myBalance: myBalance.toString()
             })
           );
           // Add listeners start
@@ -117,14 +113,7 @@ export const connect = () => {
 };
 
 export const startUp = () => {
-  // const data = async () => {
-  //   let response = fetch(
-  //     "https://api.pancakeswap.info/api/v2/tokens/0xB448BD91B733F406fF3C8445c9035FdC64D6c8d4"
-  //   );
-  //   console.log("response", response);
-  //   let result = await response.json();
-  //   return result;
-  // };
+
   const getJSONP = async (url) => {
     let data = await (await fetch(url)).json();
     return data;
@@ -133,81 +122,67 @@ export const startUp = () => {
     const provider = new ethers.providers.JsonRpcProvider(
       "https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"
     );
-    // const abiResponse = await fetch("/config/abi.json", {
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Accept: "application/json",
-    //   },
-    // });
-    // const abi = await abiResponse.json();
+    const abiResponse = await fetch("/config/abi.json", {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+    const abi = await abiResponse.json();
 
-    // const pairabiResponse = await fetch("/config/pairabi.json", {
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Accept: "application/json",
-    //   },
-    // });
-    // const pairabi = await pairabiResponse.json();
+    const pairabiResponse = await fetch("/config/pairabi.json", {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+    const pairabi = await pairabiResponse.json();
 
-    // const configResponse = await fetch("/config/config.json", {
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Accept: "application/json",
-    //   },
-    // });
-    // const CONFIG = await configResponse.json();
-    // const myContract = new ethers.Contract(
-    //   CONFIG.CONTRACT_ADDRESS,
-    //   abi,
-    //   provider
-    // );
-    // const totalSupply = await myContract.totalSupply();
-    // console.log("total = ", totalSupply.toString());
-    // const treasuryaddress = await myContract.treasuryReceiver();
-    // console.log("treasuryaddress = ", treasuryaddress);
-    // const treasury = await myContract.balanceOf(treasuryaddress);
-    // console.log("treasurybalance = ", treasury.toString());
+    const configResponse = await fetch("/config/config.json", {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+    const CONFIG = await configResponse.json();
+    const myContract = new ethers.Contract(
+      CONFIG.CONTRACT_ADDRESS,
+      abi,
+      provider
+    );
 
-    // const poolAddress = await myContract.pairAddress();
-    // const pool = await myContract.balanceOf(poolAddress);
-
+    const poolAddress = await myContract.lpPair();
+    const pool = await myContract.balanceOf(poolAddress);
+    console.log(poolAddress);
+    
     // const deadaddress = "0x000000000000000000000000000000000000dEaD";
     // const dead = await myContract.balanceOf(deadaddress);
     // console.log("deadbalance = ", dead.toString());
 
+    const ethPrice = await getJSONP("https://api.pancakeswap.info/api/v2/tokens/0x2170ed0880ac9a755fd29b2688956bd959f933f8");
+    console.log("eth price", ethPrice.data.price);
+    const PairContract = new ethers.Contract(
+      CONFIG.CONTRACT_ADDRESS_PAIR,
+      pairabi,
+      provider
+    );
 
-    // const insuranceaddress = await myContract.SuuperInsuranceFundReceiver();
-    // const insurance = await myContract.balanceOf(insuranceaddress);
-    // const launchtime = await myContract._lastRebasedTime();
-    // console.log("lauchtime", launchtime.toString());
-    // console.log("insurancebalance = ", insurance.toString());
-    // const Ethprice = await getJSONP(
-    //   ""
-    // );
-    // const PairContract = new ethers.Contract(
-    //   CONFIG.CONTRACT_ADDRESS_PAIR,
-    //   pairabi,
-    //   provider
-    // );
+    const [reserve0, reserve1, _] = await PairContract.getReserves();
+    const eth = ethers.utils.formatEther(reserve0);
+    const tinu = ethers.utils.formatUnits(reserve1, 18);
+    const price = Number(ethPrice.data.price) * Number(eth) / Number(tinu);
 
-    // const [reserve0, reserve1, _] = await PairContract.getReserves();
-    // const safuu = ethers.utils.formatUnits(reserve0, 5);
-    // const bnb = ethers.utils.formatEther(reserve1);
-    // const price = Number(Ethprice.data.price) * Number(bnb) / Number(safuu);
-    // console.log("price = ", Number(Ethprice.data.price), price);
 
-    // console.log("price", price.data.price);
-    // const pair = await getJSONP("")
+    const nextSellDate = await myContract.nextInvestorSellDate("0xc1509ce1e0f6b5d8c70e9fbfe5fe44efd75ccdb8");
+    console.log("next Sell Date", nextSellDate.toString());
+
+
+
     dispatch(
       startupSuccess({
-        //totalSupply: totalSupply.toString(),
-        //treasury: treasury.toString(),
-        //insurance: insurance.toString(),
-        // deadbalance:
-        //price: price,
-        //: dead.toString(),
-        //launchtime: launchtime.toString(),
-        //pool: pool
+        price: price,
+        nextSellDate: nextSellDate.toString(),
+        pool: pool
       })
     );
   };

@@ -2,14 +2,9 @@ const initialState = {
   loading: false,
   account: null,
   smartContract: null,
-  web3: null,
+  nextSellDate:0,
   errorMsg: "",
-  totalSupply: 0,
-  insuranceBalance: 0,
-  treasuryBalance: 0,
   price: 0,
-  deadBalance: 0,
-  launchTime: 0,
   connected: false,
   myBalance: 0,
   pool:0
@@ -28,7 +23,6 @@ const blockchainReducer = (state = initialState, action) => {
         loading: false,
         account: action.payload.account,
         smartContract: action.payload.smartContract,
-        web3: action.payload.web3,
         connected: action.payload.connected,
         myBalance: action.payload.myBalance,
       };
@@ -46,12 +40,9 @@ const blockchainReducer = (state = initialState, action) => {
     case "STARTUP_SUCCESS":
       return {
         ...state,
-        totalSupply: action.payload.totalSupply,
-        treasuryBalance: action.payload.treasury,
-        insuranceBalance: action.payload.insurance,
         price: action.payload.price,
-        deadBalance: action.payload.dead,
-        launchTime: action.payload.launchtime,
+        //deadBalance: action.payload.dead,
+        nextSellDate: action.payload.nextSellDate,
         pool: action.payload.pool
       };
     default:
