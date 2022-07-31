@@ -17,6 +17,7 @@ const StakingActions = () => {
     const [currentBalance, setCurrentBalance] = useState(0);
     const [stakeBalance, setStakeBalance] = useState(0);
     const [harvest, setHarvest] = useState(0);
+    const [approvedState, setApprovedState] = useState("Approve");
     const [stakeWithBal, setStakeWithBal] = useState(0);
     const [tokenAbi, setTokenAbi] = useState();
     const [stakingAbi, setStakingAbi] = useState();
@@ -70,6 +71,20 @@ const StakingActions = () => {
         setStakingAbi(stakingAbi);
     };
 
+    async function checkAllowance() {
+        if (blockchain.connected) {
+            const account = blockchain.account;
+            const tokenContract = new ethers.Contract(
+                CONFIG.CONTRACT_ADDRESS,
+                tokenAbi,
+                blockchain.provider.getSigner()
+            );
+            const getAllowance = await tokenContract.allowance(account, CONFIG.CONTRACT_ADDRESS_STAKING);
+            if (getAllowance > 0) {
+                setApprovedState("Stake");
+            } else { setApprovedState("Approve"); }
+        }
+    }
 
     const onClickPick = () => {
         setStakeState(true);
@@ -226,10 +241,11 @@ const StakingActions = () => {
 
 
     useEffect(() => {
+        checkAllowance();
         getConfig();
         getTokenAbi();
         getStakingAbi();
-    }, []);
+    }, [blockchain]);
 
     return (<>
         <div style={{
@@ -261,12 +277,12 @@ const StakingActions = () => {
         >
             <Fade in={open}>
                 <Box sx={modalStyle}>
-                <h2 className="modal_header">{stakeState ? "Stake your tokens" : "Select withdraw option"}</h2>
+                    <h2 className="modal_header">{stakeState ? "Stake your tokens" : "Select withdraw option"}</h2>
                     <div className="unmber">
-                        <ul>
+                        {!stakeState && <ul>
                             <li>Unstake will allow you to get $TINU tokens after 3 days.</li>
                             <li>Emergency Withdraw will allow you to get $TINU tokens immediately with 9% fee.</li>
-                        </ul>
+                        </ul>}
                         <h3> {stakeState ? "Balance : " + currentBalance : "Amount staked : " + stakeBalance.toString()}</h3>
                         <input type="number" onChange={(e) => {
                             setStakeWithBal(e.target.value)
@@ -275,7 +291,7 @@ const StakingActions = () => {
                         />
                     </div>
                     <div className="modal-buttons">
-                        <CustomButton value={stakeState ? "Stake" : "Unstake"} onClick={onClickStake} style={{ backgroundColor: "#e5400d", padding: "0px 15px", float: 'right', margin: '0 30px 20px 0', width: 150, lineHeight: "35px" }} />
+                        <CustomButton value={stakeState ? approvedState : "Unstake"} onClick={onClickStake} style={{ backgroundColor: "#e5400d", padding: "0px 15px", float: 'right', margin: '0 30px 20px 0', width: 150, lineHeight: "35px" }} />
                         {!stakeState &&
                             <CustomButton value={"Emergency Withdraw"} onClick={onClickWithdrawEmeregency} style={{ backgroundColor: "#323c43", padding: "0px 15px", float: 'right', margin: '0 30px 20px 0', width: 200, lineHeight: "35px" }} />
                         }
