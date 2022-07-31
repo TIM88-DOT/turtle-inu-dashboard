@@ -10,7 +10,7 @@ const initialState = {
   pool: 0,
   stakingContract: null,
   provider: null,
-  apy:0
+  apy:""
 };
 
 const blockchainReducer = (state = initialState, action) => {
