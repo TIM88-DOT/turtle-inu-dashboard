@@ -54,6 +54,7 @@ export const connect = () => {
       },
     });
     const abi = await abiResponse.json();
+
     const configResponse = await fetch("/config/config.json", {
       headers: {
         "Content-Type": "application/json",
@@ -61,12 +62,18 @@ export const connect = () => {
       },
     });
     const CONFIG = await configResponse.json();
+
+    const stakingAbiResponse = await fetch("/config/stakingabi.json", {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+    const stakingAbi = await stakingAbiResponse.json();
+
     const { ethereum } = window;
     const metamaskIsInstalled = ethereum && ethereum.isMetaMask;
     if (metamaskIsInstalled) {
-      // Web3EthContract.setProvider(ethereum);
-      // let web3 = new Web3(ethereum);
-
       try {
         const accounts = await ethereum.request({
           method: "eth_requestAccounts",
@@ -81,18 +88,27 @@ export const connect = () => {
             abi,
             provider
           );
+
+          const stakingContract = new ethers.Contract(
+            CONFIG.CONTRACT_ADDRESS_STAKING,
+            stakingAbi,
+            provider
+          );
+
           //const myBalance0 = await myContract.balanceOf(accounts[0]);
           const myBalance0 = await myContract.balanceOf(accounts[0]);
           const myBalance = ethers.utils.formatUnits(myBalance0, 18);
-          const nextSellDate = await myContract.nextInvestorSellDate(accounts[0]);
+          //const nextSellDate = await myContract.nextInvestorSellDate(accounts[0]);
           
           dispatch(
             connectSuccess({
               account: signer,
               connected: true,
               smartContract: myContract,
+              stakingContract: stakingContract,
               myBalance: myBalance.toString(),
-              nextSellDate: nextSellDate.toString()
+              provider: provider
+              //nextSellDate: nextSellDate.toString()
 
             })
           );
@@ -155,32 +171,32 @@ export const startUp = () => {
       provider
     );
 
-    const poolAddress = await myContract.lpPair();
-    const pool = await myContract.balanceOf(poolAddress);
-    console.log(poolAddress);
+    // const poolAddress = await myContract.lpPair();
+    // const pool = await myContract.balanceOf(poolAddress);
+    // console.log(poolAddress);
     
     // const deadaddress = "0x000000000000000000000000000000000000dEaD";
     // const dead = await myContract.balanceOf(deadaddress);
     // console.log("deadbalance = ", dead.toString());
 
-    const ethPrice = await getJSONP("https://api.pancakeswap.info/api/v2/tokens/0x2170ed0880ac9a755fd29b2688956bd959f933f8");
-    console.log("eth price", ethPrice.data.price);
-    const PairContract = new ethers.Contract(
-      CONFIG.CONTRACT_ADDRESS_PAIR,
-      pairabi,
-      provider
-    );
+    // const ethPrice = await getJSONP("https://api.pancakeswap.info/api/v2/tokens/0x2170ed0880ac9a755fd29b2688956bd959f933f8");
+    // console.log("eth price", ethPrice.data.price);
+    // const PairContract = new ethers.Contract(
+    //   CONFIG.CONTRACT_ADDRESS_PAIR,
+    //   pairabi,
+    //   provider
+    // );
 
-    const [reserve0, reserve1, _] = await PairContract.getReserves();
-    const eth = ethers.utils.formatEther(reserve0);
-    const tinu = ethers.utils.formatUnits(reserve1, 18);
-    const price = Number(ethPrice.data.price) * Number(eth) / Number(tinu);
+    // const [reserve0, reserve1, _] = await PairContract.getReserves();
+    // const eth = ethers.utils.formatEther(reserve0);
+    // const tinu = ethers.utils.formatUnits(reserve1, 18);
+    // const price = Number(ethPrice.data.price) * Number(eth) / Number(tinu);
 
 
     dispatch(
       startupSuccess({
-        price: price,
-        pool: pool
+        price: 0,
+        pool: 0
       })
     );
   };

@@ -10,7 +10,6 @@ function App() {
   return (
     <>
       <Router>
-        {/* <Sidebar/> */}
         <Navbar />
         <Switch>
           <Route path="/" component={Account} />

@@ -74,7 +74,7 @@ h4 h5 {
 }
 
 .inner_block2 {
-  padding:1em 0.5em;
+  padding: 1em 0.5em;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -148,20 +148,18 @@ h4 h5 {
   }
 }
 
-.pill-btn {
-  display: inline-block;
-  box-sizing: border-box;
-  line-height: 64px;
-  background: rgba(77,236,159,.2);
-  padding: 0px 30px;
-  border-radius: 999em;
-  text-decoration: none;
-  color: #fff;
-  font-size: 16px;
-  vertical-align: bottom;
-  white-space: nowrap;
-  letter-spacing: 2px;
-  transition: .15s background-color, .15s border-color, .15s color, .15s fill;
-  font-weight: 600;
-  cursor: pointer;
+.unmber {
+  padding: 50px 50px 30px;
+}
+
+.unmber input {
+  font-size: 20px;
+  width: 250px;
+}
+
+.modal-buttons {
+  display: flex; 
+  width: 100%;
+  justify-content: center;
+  margin: 15px;
 }

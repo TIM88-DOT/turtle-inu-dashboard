@@ -1,0 +1,24 @@
+.button {
+    display: inline-block;
+    box-sizing: border-box;
+    line-height: 50px;
+    background: rgba(77,236,159,.2);
+    padding: 0px 15px;
+    border-radius: 999em;
+    text-decoration: none;
+    color: #fff;
+    font-size: 16px;
+    vertical-align: bottom;
+    white-space: nowrap;
+    transition: .15s background-color, .15s border-color, .15s color, .15s fill;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    margin-inline: 20px;
+}
+
+.button:hover {
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    transform: translateY(-3px);
+  }
+  
