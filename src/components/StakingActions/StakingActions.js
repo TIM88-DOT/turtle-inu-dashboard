@@ -179,13 +179,13 @@ const StakingActions = () => {
                         const getAllowance = await tokenContract.allowance(account, CONFIG.CONTRACT_ADDRESS_STAKING);
                         console.log('getAllowance', getAllowance / Math.pow(10, 18))
                         if (getAllowance / Math.pow(10, 18) < stakeWithBal) {
-                            setStakeState("Approve")
+                            setApprovedState("Approve")
                             const tokenCon = await tokenContract.approve(CONFIG.CONTRACT_ADDRESS_STAKING, (sendToken));
                             await tokenCon.wait();
                             dispatch(connect());
                         }
                         else {
-                            setStakeState("Stake")
+                            setApprovedState("Stake")
                         }
 
                         console.log('sendToken', sendToken)
