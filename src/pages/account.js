@@ -18,6 +18,7 @@ const Account = () => {
   const [tinuPrice, setTinuPrice] = useState(0);
   const [claimableRewards, setClaimableRewards] = useState(0);
   const [pendingRewards, setPendingRewards] = useState(0);
+  const [stakedAmount, setStakedAmount] = useState(0);
   const [sec, setSec] = useState({ h: "00", m: "00", s: "00" });
   const [claimSec, setClaimSec] = useState({ h: "00", m: "00", s: "00" });
 
@@ -69,6 +70,7 @@ const Account = () => {
           const userInfos = await blockchain.stakingContract.userInfos(blockchain.account);
           const pendingRewards = ethers.utils.formatUnits(userInfos.pendingAmount, 18).toString().slice(0, 6);
           setPendingRewards(pendingRewards);
+          setStakedAmount(ethers.utils.formatUnits(userInfos.stakedAmount, 18));
         } else {
           clearInterval(stakingTimer)
         }
@@ -122,10 +124,15 @@ const Account = () => {
               <h5>$TINU</h5></div>
           </div>
           <div className="block_inner right_block">
+            <h4>Staked Amount</h4>
+            <div className="price"><h3>{stakedAmount}</h3>
+              <h5>$TINU</h5></div>
+          </div>
+
+          <div className="block_inner right_block">
             <h4>TINU Price</h4>
             <div className="price"><h3>{tinuPrice}</h3>
               <h5>$USD</h5></div>
-
           </div>
         </div>
 

@@ -98,7 +98,29 @@ const StakingActions = () => {
                 alert(`You just claimed your tokens !`)
             }
         } catch (err) {
-            console.log(err)
+            console.log(err);
+            alert(err.message);
+        }
+    }
+
+    const onClickHarvest = async () => {
+        setStakeState(false);
+        setStakeWithBal(0);
+        try {
+            if (blockchain.connected) {
+                const stakingContract = new ethers.Contract(
+                    CONFIG.CONTRACT_ADDRESS_STAKING,
+                    stakingAbi,
+                    blockchain.provider.getSigner()
+                );
+                const farmCon = await stakingContract.harvest();
+                await farmCon.wait();
+                dispatch(connect());
+                alert(`You just harvested your rewards !`)
+            }
+        } catch (err) {
+            console.log(err);
+            alert(err.message);
         }
     }
 
@@ -114,7 +136,8 @@ const StakingActions = () => {
                 setOpen(true)
             }
         } catch (err) {
-            console.log(err)
+            console.log(err);
+            alert(err.message);
         }
     }
 
@@ -159,7 +182,8 @@ const StakingActions = () => {
                     }
                 }
             } catch (err) {
-                console.log(err)
+                console.log(err);
+                alert(err.message);
             }
         } else {
             alert('please insert stake or withdraw value')
@@ -192,7 +216,8 @@ const StakingActions = () => {
                     setOpen(false)
                 }
             } catch (err) {
-                console.log(err)
+                console.log(err);
+                alert(err.message);
             }
         } else {
             alert('please insert stake or withdraw value')
@@ -210,13 +235,16 @@ const StakingActions = () => {
         <div style={{
             display: "flex",
             justifyContent: "center",
-            marginBottom: "22px"
+            marginBlock: "25px"
         }} className="secondary_block">
             <div>
                 <CustomButton style={{ backgroundColor: "#e5400d" }} onClick={() => onClickPick()} value="Stake $TINU" />
             </div>
             <div>
                 <CustomButton onClick={() => onClickClaim()} value="Claim $TINU" />
+            </div>
+            <div>
+                <CustomButton onClick={() => onClickHarvest()} value="Harvest $TINU" style={{ backgroundColor: "#09160c" }} />
             </div>
             <div>
                 <CustomButton style={{ backgroundColor: "#323c43" }} onClick={() => onClickWithdraw()} value="Withdraw $TINU" />
@@ -244,7 +272,7 @@ const StakingActions = () => {
                     <div className="modal-buttons">
                         <CustomButton value={stakeState ? "Stake" : "Withdraw"} onClick={onClickStake} style={{ backgroundColor: "#e5400d", padding: "0px 15px", float: 'right', margin: '0 30px 20px 0', width: 150, lineHeight: "35px" }} />
                         {!stakeState &&
-                            <CustomButton value={"Emeregency Withdraw"} onClick={onClickWithdrawEmeregency} style={{ backgroundColor: "#323c43", padding: "0px 15px", float: 'right', margin: '0 30px 20px 0', width: 200, lineHeight: "35px" }} />
+                            <CustomButton value={"Emergency Withdraw"} onClick={onClickWithdrawEmeregency} style={{ backgroundColor: "#323c43", padding: "0px 15px", float: 'right', margin: '0 30px 20px 0', width: 200, lineHeight: "35px" }} />
                         }
 
                     </div>
