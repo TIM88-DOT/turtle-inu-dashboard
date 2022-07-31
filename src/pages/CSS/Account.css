@@ -9,7 +9,17 @@
 
 .header {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
+}
+
+.header h3 {
+  margin-top: 0;
+  align-self: start;
+}
+.header span{
+  color: #e5400d;
 }
 
 .header img {

@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import { ethers } from "ethers";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { connect } from "../../redux/blockchain/blockchainActions";
 
@@ -16,11 +16,12 @@ const StakingActions = () => {
     const [stakeState, setStakeState] = useState(false);
     const [currentBalance, setCurrentBalance] = useState(0);
     const [stakeBalance, setStakeBalance] = useState(0);
-    const [harvest, setHarvest] = useState(0);
+    const [showClaim, setShowClaim] = useState(false);
     const [approvedState, setApprovedState] = useState("Approve");
     const [stakeWithBal, setStakeWithBal] = useState(0);
     const [tokenAbi, setTokenAbi] = useState();
     const [stakingAbi, setStakingAbi] = useState();
+    const inputElement = useRef();
     const [CONFIG, SET_CONFIG] = useState({
         CONTRACT_ADDRESS: "",
         CONTRACT_ADDRESS_STAKING: ""
@@ -71,20 +72,7 @@ const StakingActions = () => {
         setStakingAbi(stakingAbi);
     };
 
-    async function checkAllowance() {
-        if (blockchain.connected) {
-            const account = blockchain.account;
-            const tokenContract = new ethers.Contract(
-                CONFIG.CONTRACT_ADDRESS,
-                tokenAbi,
-                blockchain.provider.getSigner()
-            );
-            const getAllowance = await tokenContract.allowance(account, CONFIG.CONTRACT_ADDRESS_STAKING);
-            if (getAllowance > 0) {
-                setApprovedState("Stake");
-            } else { setApprovedState("Approve"); }
-        }
-    }
+
 
     const onClickPick = () => {
         setStakeState(true);
@@ -202,12 +190,10 @@ const StakingActions = () => {
                 }
             } catch (err) {
                 console.log(err);
-                alert(err.message);
             }
         } else {
             alert('please insert stake or withdraw value')
         }
-
     }
 
     const onClickWithdrawEmeregency = async () => {
@@ -243,8 +229,44 @@ const StakingActions = () => {
         }
     }
 
+    async function checkAllowance() {
+        if (blockchain.connected) {
+            const account = blockchain.account;
+            const tokenContract = new ethers.Contract(
+                CONFIG.CONTRACT_ADDRESS,
+                tokenAbi,
+                blockchain.provider.getSigner()
+            );
+            const getAllowance = await tokenContract.allowance(account, CONFIG.CONTRACT_ADDRESS_STAKING);
+            if (getAllowance > 0) {
+                setApprovedState("Stake");
+            } else { setApprovedState("Approve"); }
+        }
+    }
+
+    async function getTimeDiff() {
+        if (blockchain.connected) {
+            const timeDiffForClaim = await blockchain.stakingContract.timeDiffForClaim(blockchain.account);
+            if (timeDiffForClaim > 0) {
+                setShowClaim(false)
+            }
+            else {
+                setShowClaim(true)
+            }
+        }
+    }
+
+    const setMaxValue = () => {
+        console.log("clicked")
+        if (stakeState) {
+            inputElement.current.value = currentBalance;
+        } else {
+            inputElement.current.value = stakeBalance;
+        }
+    }
 
     useEffect(() => {
+        getTimeDiff();
         checkAllowance();
         getConfig();
         getTokenAbi();
@@ -261,7 +283,7 @@ const StakingActions = () => {
                 <CustomButton style={{ backgroundColor: "#e5400d" }} onClick={() => onClickPick()} value="Stake $TINU" />
             </div>
             <div>
-                <CustomButton onClick={() => onClickClaim()} value="Claim $TINU" />
+                {showClaim && (stakeBalance > 0) && <CustomButton onClick={() => onClickClaim()} value="Claim $TINU" />}
             </div>
             <div>
                 <CustomButton onClick={() => onClickHarvest()} value="Harvest $TINU" style={{ backgroundColor: "#09160c" }} />
@@ -288,11 +310,12 @@ const StakingActions = () => {
                             <li>Emergency Withdraw will allow you to get $TINU tokens immediately with 9% fee.</li>
                         </ul>}
                         <h3> {stakeState ? "Balance : " + currentBalance : "Amount staked : " + stakeBalance.toString()}</h3>
-                        <input type="number" onChange={(e) => {
+                        <input ref={inputElement} type="number" max={currentBalance} onChange={(e) => {
                             setStakeWithBal(e.target.value)
                             if (e.target.value < 0) e.target.value = 0
                         }}
                         />
+                        <a style={{ color: "blue", marginLeft: "10px" }} onClick={() => setMaxValue()}>Max</a>
                     </div>
                     <div className="modal-buttons">
                         <CustomButton value={stakeState ? approvedState : "Unstake"} onClick={onClickStake} style={{ backgroundColor: "#e5400d", padding: "0px 15px", float: 'right', margin: '0 30px 20px 0', width: 150, lineHeight: "35px" }} />

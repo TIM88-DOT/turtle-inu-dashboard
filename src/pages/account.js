@@ -19,6 +19,7 @@ const Account = () => {
   const [claimableRewards, setClaimableRewards] = useState(0);
   const [pendingRewards, setPendingRewards] = useState(0);
   const [stakedAmount, setStakedAmount] = useState(0);
+  const [currentApy, setCurrentApy] = useState(0);
   const [sec, setSec] = useState({ h: "00", m: "00", s: "00" });
   const [claimSec, setClaimSec] = useState({ h: "00", m: "00", s: "00" });
 
@@ -47,6 +48,7 @@ const Account = () => {
   }, [blockchain]);
 
   useEffect(() => {
+    getApy();
     getTimeDiff();
   }, [blockchain]);
 
@@ -101,6 +103,13 @@ const Account = () => {
     }
 
   }
+  async function getApy() {
+    if (blockchain.connected) {
+      const apy = await blockchain.apy;
+      setCurrentApy(apy);
+    }
+
+  }
 
   return (
     <div>
@@ -108,6 +117,7 @@ const Account = () => {
       <div className="account">
         <div className="header">
           <h1>Turtle Inu Official Dashboard  </h1>
+          <h3>Current APY : <span>{currentApy} %</span></h3>
         </div>
 
 

@@ -98,8 +98,8 @@ export const connect = () => {
           //const myBalance0 = await myContract.balanceOf(accounts[0]);
           const myBalance0 = await myContract.balanceOf(accounts[0]);
           const myBalance = ethers.utils.formatUnits(myBalance0, 18);
-          //const nextSellDate = await myContract.nextInvestorSellDate(accounts[0]);
-          
+          const nextSellDate = await myContract.nextInvestorSellDate(accounts[0]);
+
           dispatch(
             connectSuccess({
               account: signer,
@@ -107,8 +107,8 @@ export const connect = () => {
               smartContract: myContract,
               stakingContract: stakingContract,
               myBalance: myBalance.toString(),
-              provider: provider
-              //nextSellDate: nextSellDate.toString()
+              provider: provider,
+              nextSellDate: nextSellDate.toString()
 
             })
           );
@@ -165,38 +165,57 @@ export const startUp = () => {
       },
     });
     const CONFIG = await configResponse.json();
+
+    const stakingAbiResponse = await fetch("/config/stakingabi.json", {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+    const stakingAbi = await stakingAbiResponse.json();
+
     const myContract = new ethers.Contract(
       CONFIG.CONTRACT_ADDRESS,
       abi,
       provider
     );
 
-    // const poolAddress = await myContract.lpPair();
-    // const pool = await myContract.balanceOf(poolAddress);
-    // console.log(poolAddress);
-    
-    // const deadaddress = "0x000000000000000000000000000000000000dEaD";
-    // const dead = await myContract.balanceOf(deadaddress);
-    // console.log("deadbalance = ", dead.toString());
+    const stakingContract = new ethers.Contract(
+      CONFIG.CONTRACT_ADDRESS_STAKING,
+      stakingAbi,
+      provider
+    );
 
-    // const ethPrice = await getJSONP("https://api.pancakeswap.info/api/v2/tokens/0x2170ed0880ac9a755fd29b2688956bd959f933f8");
-    // console.log("eth price", ethPrice.data.price);
-    // const PairContract = new ethers.Contract(
-    //   CONFIG.CONTRACT_ADDRESS_PAIR,
-    //   pairabi,
-    //   provider
-    // );
 
-    // const [reserve0, reserve1, _] = await PairContract.getReserves();
-    // const eth = ethers.utils.formatEther(reserve0);
-    // const tinu = ethers.utils.formatUnits(reserve1, 18);
-    // const price = Number(ethPrice.data.price) * Number(eth) / Number(tinu);
+    const poolAddress = await myContract.lpPair();
+    const pool = await myContract.balanceOf(poolAddress);
+    console.log(poolAddress);
+
+    const deadaddress = "0x000000000000000000000000000000000000dEaD";
+    const dead = await myContract.balanceOf(deadaddress);
+    console.log("deadbalance = ", dead.toString());
+
+    const ethPrice = await getJSONP("https://api.pancakeswap.info/api/v2/tokens/0x2170ed0880ac9a755fd29b2688956bd959f933f8");
+    console.log("eth price", ethPrice.data.price);
+    const PairContract = new ethers.Contract(
+      CONFIG.CONTRACT_ADDRESS_PAIR,
+      pairabi,
+      provider
+    );
+
+    const [reserve0, reserve1, _] = await PairContract.getReserves();
+    const eth = ethers.utils.formatEther(reserve0);
+    const tinu = ethers.utils.formatUnits(reserve1, 18);
+    const price = Number(ethPrice.data.price) * Number(eth) / Number(tinu);
+
+    const apy = await stakingContract.rewardRate();
 
 
     dispatch(
       startupSuccess({
-        price: 0,
-        pool: 0
+        apy: apy.toString(),
+        price: price,
+        pool: pool
       })
     );
   };
