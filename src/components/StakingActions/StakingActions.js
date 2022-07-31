@@ -262,7 +262,7 @@ const StakingActions = () => {
             <Fade in={open}>
                 <Box sx={modalStyle}>
                     <div className="unmber">
-                        <h3> {stakeState ? "Balance : " + currentBalance : "Staked : " + stakeBalance.toString().slice(0, 6)}</h3>
+                        <h3> {stakeState ? "Balance : " + currentBalance : "Staked : " + stakeBalance.toString()}</h3>
                         <input type="number" onChange={(e) => {
                             setStakeWithBal(e.target.value)
                             if (e.target.value < 0) e.target.value = 0
