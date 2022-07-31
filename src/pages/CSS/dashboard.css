@@ -148,13 +148,19 @@ h4 h5 {
   }
 }
 
+.modal_header{
+  margin-left: 30px;
+}
 .unmber {
-  padding: 50px 50px 30px;
+  padding: 10px 50px 10px;
 }
 
 .unmber input {
   font-size: 20px;
   width: 250px;
+}
+.unmber ul{
+  margin: 0;
 }
 
 .modal-buttons {

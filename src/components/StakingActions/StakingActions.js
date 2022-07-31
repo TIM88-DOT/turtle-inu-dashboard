@@ -261,8 +261,13 @@ const StakingActions = () => {
         >
             <Fade in={open}>
                 <Box sx={modalStyle}>
+                <h2 className="modal_header">{stakeState ? "Stake your tokens" : "Select withdraw option"}</h2>
                     <div className="unmber">
-                        <h3> {stakeState ? "Balance : " + currentBalance : "Staked : " + stakeBalance.toString()}</h3>
+                        <ul>
+                            <li>Unstake will allow you to get $TINU tokens after 3 days.</li>
+                            <li>Emergency Withdraw will allow you to get $TINU tokens immediately with 9% fee.</li>
+                        </ul>
+                        <h3> {stakeState ? "Balance : " + currentBalance : "Amount staked : " + stakeBalance.toString()}</h3>
                         <input type="number" onChange={(e) => {
                             setStakeWithBal(e.target.value)
                             if (e.target.value < 0) e.target.value = 0
@@ -270,7 +275,7 @@ const StakingActions = () => {
                         />
                     </div>
                     <div className="modal-buttons">
-                        <CustomButton value={stakeState ? "Stake" : "Withdraw"} onClick={onClickStake} style={{ backgroundColor: "#e5400d", padding: "0px 15px", float: 'right', margin: '0 30px 20px 0', width: 150, lineHeight: "35px" }} />
+                        <CustomButton value={stakeState ? "Stake" : "Unstake"} onClick={onClickStake} style={{ backgroundColor: "#e5400d", padding: "0px 15px", float: 'right', margin: '0 30px 20px 0', width: 150, lineHeight: "35px" }} />
                         {!stakeState &&
                             <CustomButton value={"Emergency Withdraw"} onClick={onClickWithdrawEmeregency} style={{ backgroundColor: "#323c43", padding: "0px 15px", float: 'right', margin: '0 30px 20px 0', width: 200, lineHeight: "35px" }} />
                         }
