@@ -260,8 +260,10 @@ const StakingActions = () => {
         console.log("clicked")
         if (stakeState) {
             inputElement.current.value = currentBalance;
+            setStakeWithBal(currentBalance);
         } else {
             inputElement.current.value = stakeBalance;
+            setStakeWithBal(stakeBalance);
         }
     }
 
