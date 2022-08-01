@@ -6,7 +6,7 @@ import { ethers } from "ethers";
 import './CSS/Account.css';
 import './CSS/dashboard.css'
 import StakingActions from "../components/StakingActions/StakingActions"
-import { secondsToTime } from '../utils'
+import { secondsToTime, secondsToDayTime } from '../utils'
 
 
 const Account = () => {
@@ -21,7 +21,7 @@ const Account = () => {
   const [stakedAmount, setStakedAmount] = useState(0);
   const [currentApy, setCurrentApy] = useState(0);
   const [sec, setSec] = useState({ h: "00", m: "00", s: "00" });
-  const [claimSec, setClaimSec] = useState({ h: "00", m: "00", s: "00" });
+  const [claimSec, setClaimSec] = useState({ d: "00", h: "00", m: "00", s: "00" });
 
   var timer = 0;
   const secondes = useRef(0);
@@ -88,7 +88,7 @@ const Account = () => {
     setSec(secondsToTime(secondes.current));
 
     if (claimSeconds.current) claimSeconds.current--;
-    setClaimSec(secondsToTime(claimSeconds.current))
+    setClaimSec(secondsToDayTime(claimSeconds.current))
   };
 
   async function getTimeDiff() {
@@ -155,7 +155,7 @@ const Account = () => {
             </div>
             <div className="inner_block2 right_block">
               <h4>Claim unlocks in</h4>
-              <h5>{claimSec.h}:{claimSec.m}:{claimSec.s}</h5>
+              <h5>{claimSec.d}:{claimSec.h}:{claimSec.m}:{claimSec.s}</h5>
             </div>
           </div>
 
