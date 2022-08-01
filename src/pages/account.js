@@ -173,7 +173,7 @@ const Account = () => {
         </div>
       </div >
       <StakingActions />
-      <a style={{ position: "absolute", bottom: "0", right: "10px", fontSize: "18px", color:"red", textDecoration: "none" }} href="https://t.me/nibthebear"> with ♥ by 🐻</a>
+      <a style={{ position: "absolute", right: "10px", fontSize: "18px", color:"red", textDecoration: "none" }} href="https://t.me/nibthebear"> with ♥ by 🐻</a>
     </div>
   );
 };
