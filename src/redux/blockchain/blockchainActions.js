@@ -185,9 +185,13 @@ export const startUp = () => {
     const pool = await myContract.balanceOf(poolAddress);
     console.log(poolAddress);
 
-    const deadaddress = "0x000000000000000000000000000000000000dEaD";
-    const dead = await myContract.balanceOf(deadaddress);
-    console.log("deadbalance = ", dead.toString());
+    const contractBalance0 = await myContract.balanceOf(CONFIG.CONTRACT_ADDRESS_STAKING);
+    const contractBalance = ethers.utils.formatUnits(contractBalance0, 18);
+    console.log("contract balance",contractBalance);
+
+    // const deadaddress = "0x000000000000000000000000000000000000dEaD";
+    // const dead = await myContract.balanceOf(deadaddress);
+    // console.log("deadbalance = ", dead.toString());
 
     const ethPrice = await getJSONP("https://api.pancakeswap.info/api/v2/tokens/0x2170ed0880ac9a755fd29b2688956bd959f933f8");
     console.log("eth price", ethPrice.data.price);
@@ -209,7 +213,8 @@ export const startUp = () => {
       startupSuccess({
         apy: apy.toString(),
         price: price,
-        pool: pool
+        pool: pool,
+        contractBalance: contractBalance.toString()
       })
     );
   };

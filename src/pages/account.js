@@ -13,7 +13,7 @@ const Account = () => {
 
   const dispatch = useDispatch();
   let blockchain = useSelector((state) => state.blockchain);
-  const [myValue, setMyValue] = useState(0);
+  const [tvl, setTvl] = useState(0);
   const [myBalance, setMyBalance] = useState(0);
   const [tinuPrice, setTinuPrice] = useState(0);
   const [claimableRewards, setClaimableRewards] = useState(0);
@@ -40,17 +40,19 @@ const Account = () => {
 
     setTinuPrice(Number(blockchain.price).toFixed(7));
     if (blockchain.myBalance !== 0) {
-      setMyValue(
-        (Number(blockchain.price) * Number(blockchain.myBalance)).toFixed(2)
-      );
+      // setMyValue(
+      //   (Number(blockchain.price) * Number(blockchain.myBalance)).toFixed(2)
+      // );
       setMyBalance(Number(blockchain.myBalance).toFixed(2));
     }
-  }, [blockchain]);
 
-  useEffect(() => {
+    setTvl((Number(blockchain.price) * Number(blockchain.contractBalance)).toFixed(2))
+
     getApy();
     getTimeDiff();
+
   }, [blockchain]);
+
 
   useEffect(() => {
     if (timer > 0) clearInterval(timer);
@@ -166,14 +168,14 @@ const Account = () => {
             </div>
             <div className="inner_block2 right_block">
               <h4>Vault Value (TVL)</h4>
-              <h5>Coming Soon</h5>
+              <h5>{tvl} $USD</h5>
             </div>
           </div>
 
         </div>
       </div >
       <StakingActions />
-      <a style={{ position: "absolute", right: "10px", fontSize: "18px", color:"red", textDecoration: "none" }} href="https://t.me/nibthebear"> with ♥ by 🐻</a>
+      <a style={{ position: "absolute", right: "10px", fontSize: "18px", color: "red", textDecoration: "none" }} href="https://t.me/nibthebear"> with ♥ by 🐻</a>
     </div>
   );
 };

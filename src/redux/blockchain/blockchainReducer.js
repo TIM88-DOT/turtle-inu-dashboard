@@ -10,7 +10,8 @@ const initialState = {
   pool: 0,
   stakingContract: null,
   provider: null,
-  apy:""
+  apy: "",
+  contractBalance: null
 };
 
 const blockchainReducer = (state = initialState, action) => {
@@ -48,8 +49,9 @@ const blockchainReducer = (state = initialState, action) => {
         ...state,
         price: action.payload.price,
         apy: action.payload.apy,
-        //deadBalance: action.payload.dead,
+        contractBalance: action.payload.contractBalance,
         pool: action.payload.pool
+        //deadBalance: action.payload.dead,
       };
     default:
       return state;
