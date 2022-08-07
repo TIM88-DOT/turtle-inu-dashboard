@@ -1,1 +1,1 @@
-# safuu
+# Tinu staking dapp
